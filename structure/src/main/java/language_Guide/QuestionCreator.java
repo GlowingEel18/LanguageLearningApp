@@ -1,17 +1,16 @@
 package language_Guide;
+
 /**
  * A utility class to create different types of questions based on the complexity of a word within a lesson.
  */
-
 public class QuestionCreator {
     /**
      * Constructor for creating an instance of QuestionCreator.
      * This constructor does not perform any operations.
      */
-
-    // Constructor
     public QuestionCreator() {
     }
+
     /**
      * Creates a question based on the complexity of a word in the given lesson. The type of question
      * generated depends on the point value of the word, where different thresholds lead to different
@@ -22,14 +21,16 @@ public class QuestionCreator {
      * @throws IllegalArgumentException If the word's point value does not match any expected thresholds.
      */
     public Question createQuestion(Lesson lesson) {
-        Word word = lesson.getRandomWord();  // Retrieve a random word from the lesson.
-        // attempt to fix issue with practicelowunderstanding
-        if(word == null) {
+        Word word = lesson.getRandomWord(); // Retrieve a random word from the lesson.
+
+        // Handle null case where no word is returned.
+        if (word == null) {
             System.out.println("No further questions");
             return null;
         }
-        int wordPoint = word.getPoints();    // Get the point value of the word.
-        
+
+        int wordPoint = word.getPoints(); // Get the point value of the word.
+
         // Determine the type of question to create based on the word's point value.
         if (wordPoint >= 300) {
             // High complexity word generates a Matching question.
@@ -44,11 +45,11 @@ public class QuestionCreator {
             // No points or negative points generate a TrueOrFalse question.
             Word anotherWord;
             do {
-                anotherWord = lesson.getRandomWord();  // Ensure the second word is different from the first.
-            } while (anotherWord.equals(word));
+                anotherWord = lesson.getRandomWord();
+            } while (anotherWord != null && anotherWord.equals(word));
             return new TrueOrFalse(lesson.getLanguageName(), word, anotherWord);
         }
-        
+
         // Throw an exception if the word's point value does not match any of the defined thresholds.
         throw new IllegalArgumentException("Unsupported wordPoint value: " + wordPoint);
     }
